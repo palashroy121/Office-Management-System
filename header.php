@@ -28,7 +28,7 @@ if(isset($_GET['action']) && $_GET['action'] == "logout") {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>OMS - Dashboard</title>
+    <title>OMS - Dashboard | Shahali</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
