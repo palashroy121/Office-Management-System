@@ -458,6 +458,67 @@ class Oms {
 			return $msg;
 		}
 	}
+	//View Setting
+	public function view_setting(){
+		$sql = "SELECT * FROM setting";
+		$query = $this->db->conn->prepare($sql);
+		$query -> execute();
+		$result = $query->fetch(PDO::FETCH_OBJ);
+		return $result;
+	}
+	//Edit Setting
+	public function edit_setting($data){
+		$id 				= $data['id'];
+		$company_name		= $data['company_name'];
+		$company_address	= $data['company_address'];
+		$office_start_time	= date('H:i:s', strtotime($data['office_start_time']));
+		$office_end_time	= date('H:i:s', strtotime($data['office_end_time']));
+
+		$permited = array('jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'xlsx', 'zip', 'rar');
+		$file_name = $_FILES['company_logo']['name'];
+		$file_size = $_FILES['company_logo']['size'];
+		$file_temp = $_FILES['company_logo']['tmp_name'];
+		$folder = "image/";
+		$div = explode('.', $file_name);
+		$file_ext = strtolower(end($div));
+		$file_f_name = rtrim($file_name, '.'.$file_ext);
+		$company_logo =$file_f_name.time().'.'.$file_ext;
+		move_uploaded_file($file_temp, $folder.$company_logo);
+
+		if($company_name == ""){
+			$msg['company_name'] = '<p class="text-danger"><strong>Error! </strong>Company Name must not be empty!</p>';
+		}
+		if($company_address == ""){
+			$msg['company_address'] = '<p class="text-danger"><strong>Error! </strong>Company Address must not be empty!</p>';
+		}
+		if($file_size > 10000000){
+			$msg['company_logo'] = '<p class="text-danger"><strong>Error ! </strong>File size too large!</p>';
+		}
+		else if(in_array($file_ext, $permited) == true){
+			$msg['company_logo'] = '<p class="text-danger"><strong>Error ! </strong>You can uploded only: '.implode(', ', $permited).'.</p>';
+		}
+		if(!empty($msg)){
+			return $msg;
+		}
+
+		$sql = "UPDATE setting SET(company_name=:company_name, company_logo=:company_logo, company_address=:company_address, office_start_time=:office_start_time, office_end_time=:office_end_time) WHERE id=:id";
+		$query = $this->db->conn->prepare($sql);
+		$query -> bindValue(":company_name", $company_name);
+		$query -> bindValue(":company_logo", $company_logo);
+		$query -> bindValue(":company_address", $company_address);
+		$query -> bindValue(":office_start_time", $office_start_time);
+		$query -> bindValue(":office_end_time", $office_end_time);
+		$result = $query->execute();
+		if($result){
+			$msg['su'] = '<p class="text-success"><strong>Success! </strong>Data Inserted.</p>';
+		}
+		else{
+			$msg['su'] = '<p class="text-danger"><strong>Error! </strong>Data Not Insert!</p>';
+		}
+		if(!empty($msg)){
+			return $msg;
+		}
+	}
 
 	//Leave Function
 	public function save_leave($data){
