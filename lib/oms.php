@@ -129,7 +129,7 @@ class Oms {
 			return $msg;
 		}
 
-		$sql = "UPDATE tbl_designation SET (designation=:designation) WHERE id=:id";
+		$sql = "UPDATE tbl_designation SET designation=:designation WHERE id=:id";
 		$query = $this->db->conn->prepare($sql);
 		$query -> bindValue(":designation", $designation_name);
 		$query -> bindValue(":id", $id);
@@ -198,21 +198,16 @@ class Oms {
 			return $msg;
 		}
 
-		$sql = "UPDATE tbl_leave_type SET (leave_type=:leave_type) WHERE id=:id";
+		$sql = "UPDATE tbl_leave_type SET leave_type=:leave_type WHERE id=:id";
 		$query = $this->db->conn->prepare($sql);
 		$query -> bindValue(":leave_type", $leave_type);
 		$query -> bindValue(":id", $id);
 		$result = $query->execute();
 		if($result){
-			$msg['su'] = '<p class="text-success"><strong>Success! </strong>Data Updated.</p>';
-			return $msg;
+			header("Location: add-leave-type.php");
 		}
 		else{
-			$msg['su'] = '<p class="text-danger"><strong>Error! </strong>Data Not Insert!</p>';
-			return $msg;
-		}
-		if(!empty($msg)){
-			return $msg;
+			header("Location: edit-leave-type.php");
 		}		
 	}
 	// Check Leave Type
@@ -285,11 +280,9 @@ class Oms {
 		$result = $query->execute();
 		if($result){
 			$msg['su'] = '<p class="text-success"><strong>Success! </strong>Data Inserted.</p>';
-			//return $msg;
 		}
 		else{
 			$msg['su'] = '<p class="text-danger"><strong>Error! </strong>Data Not Insert!</p>';
-			//return $msg;
 		}
 		if(!empty($msg)){
 			return $msg;
@@ -494,7 +487,7 @@ class Oms {
 		if($file_size > 10000000){
 			$msg['company_logo'] = '<p class="text-danger"><strong>Error ! </strong>File size too large!</p>';
 		}
-		else if(in_array($file_ext, $permited) == true){
+		else if(in_array($file_ext, $permited) === true){
 			$msg['company_logo'] = '<p class="text-danger"><strong>Error ! </strong>You can uploded only: '.implode(', ', $permited).'.</p>';
 		}
 		if(!empty($msg)){
@@ -606,6 +599,14 @@ class Oms {
 	//View Task
 	public function view_task(){
 		$sql = "SELECT employee.name, task.* FROM employee INNER JOIN task ON employee.id=task.employee_id";
+		$query = $this->db->conn->prepare($sql);
+		$query -> execute();
+		$result = $query->fetchAll();
+		return $result;
+	}
+	//View Task by Limit
+	public function view_task_limit(){
+		$sql = "SELECT employee.name, task.* FROM employee INNER JOIN task ON employee.id=task.employee_id ORDER BY task.id DESC LIMIT 0, 3";
 		$query = $this->db->conn->prepare($sql);
 		$query -> execute();
 		$result = $query->fetchAll();
