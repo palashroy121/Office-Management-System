@@ -20,7 +20,7 @@ $viewImp = $oms->view_employee();
                             echo $editTask['error'];
                         }
                     ?>
-                    <h1 class="page-header">Add Task</h1>
+                    <h1 class="page-header">Edit Task</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

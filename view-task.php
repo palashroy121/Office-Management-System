@@ -22,7 +22,7 @@ $viewTask = $oms->view_task_by_id($getID);
                 <?php if(!empty($viewTask)) { ?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <strong>From: <?php echo $viewTask->employee_id; ?></strong> 
+                            <strong>From: <?php echo $viewTask->name; ?></strong> 
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">

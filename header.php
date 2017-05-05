@@ -1,12 +1,12 @@
 <?php
 include 'lib/oms.php';
 $filepath = realpath(dirname(__FILE__));
-  include_once $filepath.'/lib/session.php';
-  Session::init();
-  $name = Session::get("name");
-  $msg = Session::get("loginmsg");
-  $id = Session::get("id");
-  //Session::sessionCheck();
+include_once $filepath.'/lib/session.php';
+Session::init();
+$name = Session::get("name");
+$msg = Session::get("loginmsg");
+$id = Session::get("id");
+//Session::sessionCheck();
 
 $oms = new oms();
 
@@ -19,7 +19,8 @@ $countInbox = $oms->count_inbox($id);
 //Logout
 if(isset($_GET['action']) && $_GET['action'] == "logout") {
       Session::destroy();
-    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,31 +30,12 @@ if(isset($_GET['action']) && $_GET['action'] == "logout") {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>OMS - Dashboard</title>
-
-    <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- MetisMenu CSS -->
     <link href="css/metisMenu.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link href="css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Morris Charts CSS -->
     <link href="css/morris.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
     <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 </head>
 
 <body>
@@ -123,14 +105,14 @@ if(isset($_GET['action']) && $_GET['action'] == "logout") {
                                 foreach ($taskLimit as $value) {
                         ?>
                         <li>
-                            <a href="#">
+                            <a href="view-task.php?view-id=<?php echo $value['id']; ?>">
                                 <div>
                                     <p>
                                         <strong><?php echo $value['task_name']; ?></strong>
                                     </p>
                                     <div class="progress progress-striped active">
                                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $value['completion']; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $value['completion']; ?>%">
-                                            <span class="sr-only">40% Complete (success)</span>
+                                            <span class="sr-only"><?php echo $value['completion']; ?>% Complete (success)</span>
                                         </div>
                                     </div>
                                 </div>
@@ -142,7 +124,7 @@ if(isset($_GET['action']) && $_GET['action'] == "logout") {
                         }
                         ?>
                         <li>
-                            <a class="text-center" href="#">
+                            <a class="text-center" href="task-list.php">
                                 <strong>See All Tasks</strong>
                                 <i class="fa fa-angle-right"></i>
                             </a>

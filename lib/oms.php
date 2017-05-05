@@ -606,7 +606,7 @@ class Oms {
 	}
 	//View Task by Limit
 	public function view_task_limit(){
-		$sql = "SELECT employee.name, task.* FROM employee INNER JOIN task ON employee.id=task.employee_id ORDER BY task.id DESC LIMIT 0, 3";
+		$sql = "SELECT * FROM task ORDER BY id DESC LIMIT 0, 3";
 		$query = $this->db->conn->prepare($sql);
 		$query -> execute();
 		$result = $query->fetchAll();
@@ -615,7 +615,7 @@ class Oms {
 
 	//view_task_by_id
 	public function view_task_by_id($getID){
-		$sql = "SELECT * FROM task WHERE id=$getID";
+		$sql = "SELECT employee.name, task.* FROM employee INNER JOIN task ON employee.id=task.employee_id WHERE task.id=$getID";
 		$query = $this->db->conn->prepare($sql);
 		$query -> execute();
 		$result = $query->fetch(PDO::FETCH_OBJ);
