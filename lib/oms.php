@@ -16,6 +16,9 @@ class Oms {
 
 		$result = $this->login_value_check($email, $password);
 
+		$id = $result->id;
+		$report = $this->save_report($id);
+
 		if($email == ""){
 			$msg['email'] = '<p class="text-danger"><strong>Error! </strong>Field must not be empty!</p>';
 		}
@@ -28,7 +31,6 @@ class Oms {
 		if(!empty($msg)){
 			return $msg;
 		}
-
 		if($result){
 			Session::init();
 			Session::set("login", true);
@@ -51,6 +53,19 @@ class Oms {
 		$query->execute();
 		$result = $query-> fetch(PDO::FETCH_OBJ);
 		return $result;
+	}
+
+	//Save Report
+	public function save_report($id){
+		$date = date('Y-m-d');
+		$time = date('H:i:s');
+		$sql = "INSERT INTO report (employee_id, date, entry, status) VALUES (:employee_id, :date, :entry, :status";
+		$query = $this->db->conn->prepare($sql);
+		$query -> bindValue(":employee_id", $id);
+		$query -> bindValue(":date", $date);
+		$query -> bindValue(":entry", $time);
+		$query -> bindValue(":status", 1);
+		$query->execute();
 	}
 
 	// Save Designation
@@ -135,8 +150,7 @@ class Oms {
 		$query -> bindValue(":id", $id);
 		$result = $query->execute();
 		if($result){
-			$msg['su'] = '<p class="text-success"><strong>Success! </strong>Data Inserted.</p>';
-			return $msg;
+			header("Location: add-designation.php");
 		}
 		else{
 			$msg['su'] = '<p class="text-danger"><strong>Error! </strong>Data Not Insert!</p>';
@@ -467,7 +481,7 @@ class Oms {
 		$office_start_time	= date('H:i:s', strtotime($data['office_start_time']));
 		$office_end_time	= date('H:i:s', strtotime($data['office_end_time']));
 
-		$permited = array('jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'xlsx', 'zip', 'rar');
+		$permited = array('jpg', 'jpeg', 'png', 'gif');
 		$file_name = $_FILES['company_logo']['name'];
 		$file_size = $_FILES['company_logo']['size'];
 		$file_temp = $_FILES['company_logo']['tmp_name'];
@@ -494,16 +508,17 @@ class Oms {
 			return $msg;
 		}
 
-		$sql = "UPDATE setting SET(company_name=:company_name, company_logo=:company_logo, company_address=:company_address, office_start_time=:office_start_time, office_end_time=:office_end_time) WHERE id=:id";
+		$sql = "UPDATE setting SET company_name=:company_name, company_logo=:company_logo, company_address=:company_address, office_start_time=:office_start_time, office_end_time=:office_end_time WHERE id=:id";
 		$query = $this->db->conn->prepare($sql);
 		$query -> bindValue(":company_name", $company_name);
 		$query -> bindValue(":company_logo", $company_logo);
 		$query -> bindValue(":company_address", $company_address);
 		$query -> bindValue(":office_start_time", $office_start_time);
 		$query -> bindValue(":office_end_time", $office_end_time);
+		$query -> bindValue(":id", $id);
 		$result = $query->execute();
 		if($result){
-			$msg['su'] = '<p class="text-success"><strong>Success! </strong>Data Inserted.</p>';
+			header("Location: setting.php");
 		}
 		else{
 			$msg['su'] = '<p class="text-danger"><strong>Error! </strong>Data Not Insert!</p>';

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 03, 2017 at 04:58 PM
+-- Generation Time: May 09, 2017 at 08:11 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -59,24 +59,25 @@ CREATE TABLE `employee` (
   `email` varchar(50) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(32) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = Active, 0 = Inactive'
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = Active, 0 = Inactive',
+  `user_role` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 = User, 1 = Admin'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='phone';
 
 --
 -- Dumping data for table `employee`
 --
 
-INSERT INTO `employee` (`id`, `name`, `designation`, `address`, `phone`, `joining_date`, `email`, `username`, `password`, `status`) VALUES
-(1, 'Sujon', 'IT', 'badda', '01227843', '0000-00-00', 'sujon@gmail.com', 'sujon', '123456', 1),
-(2, 'Palash', 'IT', 'mirpur', '01227843', '0000-00-00', 'palash.cmt@gmail.com', 'palash', '123456', 0),
-(3, 'MD. SUTAN MAHMUD', 'SEO', 'Gulshan', '021144', '0000-00-00', 'sultan@gmail.com', 'sultan', '123456', 1),
-(4, 'Sujon', 'SEO', 'Gulshan', '01227843', '0000-00-00', 'sultan@gmail.com', 'sultan', '123456', 1),
-(5, 'MD. SUTAN MAHMUD', 'IT', 'kkk', '8865', '0000-00-00', 'abuchalek1@gmail.com', 'sultan', '7554', 1),
-(6, 'sultan', 'SEO', 'mirpur', '01227843', '0000-00-00', 'palash.cmt@gmail.com', 'sultan2', '45567', 1),
-(7, 'Sujon', 'IT', 'badda', '021144', '0000-00-00', 'palash.cmt@gmail.com', 'sujon', '765', 1),
-(8, 'Sujon', 'IT', 'mirpur', '021144', '0000-00-00', 'abuchalek1@gmail.com', 'sultan', 'loooi', 1),
-(9, 'sagor', 'SEO', 'kkk', '021144', '2017-04-17', 'abuchalek1@gmail.com', 'sagor', '12345', 1),
-(10, 'sultan', 'SEO', 'mirpur', '01227843', '2017-04-20', 'palash.cmt@gmail.com', 'sultan', '1234556', 1);
+INSERT INTO `employee` (`id`, `name`, `designation`, `address`, `phone`, `joining_date`, `email`, `username`, `password`, `status`, `user_role`) VALUES
+(1, 'Sujon', 'IT', 'badda', '01227843', '0000-00-00', 'sujon@gmail.com', 'sujon', '123456', 1, 0),
+(2, 'Palash', 'IT', 'mirpur', '01227843', '0000-00-00', 'palash.cmt@gmail.com', 'palash', '123456', 0, 0),
+(3, 'MD. SUTAN MAHMUD', 'SEO', 'Gulshan', '021144', '0000-00-00', 'sultan@gmail.com', 'sultan', '123456', 1, 0),
+(4, 'Sujon', 'SEO', 'Gulshan', '01227843', '0000-00-00', 'sultan@gmail.com', 'sultan', '123456', 1, 0),
+(5, 'MD. SUTAN MAHMUD', 'IT', 'kkk', '8865', '0000-00-00', 'abuchalek1@gmail.com', 'sultan', '7554', 1, 0),
+(6, 'sultan', 'SEO', 'mirpur', '01227843', '0000-00-00', 'palash.cmt@gmail.com', 'sultan2', '45567', 1, 0),
+(7, 'Sujon', 'IT', 'badda', '021144', '0000-00-00', 'palash.cmt@gmail.com', 'sujon', '765', 1, 0),
+(8, 'Sujon', 'IT', 'mirpur', '021144', '0000-00-00', 'abuchalek1@gmail.com', 'sultan', 'loooi', 1, 0),
+(9, 'sagor', 'SEO', 'kkk', '021144', '2017-04-17', 'abuchalek1@gmail.com', 'sagor', '12345', 1, 0),
+(10, 'sultan', 'SEO', 'mirpur', '01227843', '2017-04-20', 'palash.cmt@gmail.com', 'sultan', '1234556', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -126,6 +127,21 @@ INSERT INTO `message` (`id`, `sender_id`, `receiver_id`, `subject`, `body`, `dat
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `report`
+--
+
+CREATE TABLE `report` (
+  `id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `entry` time NOT NULL,
+  `exit` time NOT NULL,
+  `status` tinyint(1) NOT NULL COMMENT '0 = Absent, 1 = Present'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `setting`
 --
 
@@ -143,7 +159,7 @@ CREATE TABLE `setting` (
 --
 
 INSERT INTO `setting` (`id`, `company_name`, `company_logo`, `company_address`, `office_start_time`, `office_end_time`) VALUES
-(1, 'PCR', 'sultan21493146247.jpg', 'Mirpur-6, Pollobi, Dhaka-1216.', '09:00:00', '18:00:00');
+(1, 'PCR', '1494083589.', 'Mirpur-6, Pollobi, Dhaka-1216.', '09:00:00', '18:00:00');
 
 -- --------------------------------------------------------
 
@@ -167,7 +183,8 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`id`, `employee_id`, `task_name`, `task_details`, `start_date`, `end_date`, `completion`, `status`) VALUES
-(1, 3, 'Complete the Font Page.', 'Complete the Font Page. Complete the Font Page.', '2017-04-20', '2017-04-22', 10, 3);
+(1, 3, 'Complete the Font Page.', 'Complete the Font Page. Complete the Font Page.', '2017-04-20', '2017-04-22', 35, 1),
+(2, 4, 'Complete the Login Page.', 'Complete the Login Page.', '2017-05-16', '2017-05-18', 100, 3);
 
 -- --------------------------------------------------------
 
@@ -204,7 +221,7 @@ CREATE TABLE `tbl_leave_type` (
 --
 
 INSERT INTO `tbl_leave_type` (`id`, `leave_type`) VALUES
-(1, 'Casual Leave');
+(1, 'Casual Leave 1');
 
 --
 -- Indexes for dumped tables
@@ -232,6 +249,12 @@ ALTER TABLE `leave`
 -- Indexes for table `message`
 --
 ALTER TABLE `message`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `report`
+--
+ALTER TABLE `report`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -283,6 +306,11 @@ ALTER TABLE `leave`
 ALTER TABLE `message`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
+-- AUTO_INCREMENT for table `report`
+--
+ALTER TABLE `report`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `setting`
 --
 ALTER TABLE `setting`
@@ -291,7 +319,7 @@ ALTER TABLE `setting`
 -- AUTO_INCREMENT for table `task`
 --
 ALTER TABLE `task`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tbl_designation`
 --
