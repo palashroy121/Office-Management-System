@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include 'lib/oms.php';
 $filepath = realpath(dirname(__FILE__));
 include_once $filepath.'/lib/session.php';
@@ -18,7 +19,12 @@ $countInbox = $oms->count_inbox($id);
 
 //Logout
 if(isset($_GET['action']) && $_GET['action'] == "logout") {
-      Session::destroy();
+    Session::destroy();
+}
+
+//Check Out
+if(isset($_GET['action']) && $_GET['action'] == "ckeckout") {
+    $empCheckout = $oms->ckeckout_time($id);
 }
 
 ?>
@@ -56,6 +62,9 @@ if(isset($_GET['action']) && $_GET['action'] == "logout") {
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a href="?action=ckeckout" class="btn btn-success"><strong>Check Out</strong></a>
+                </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-envelope fa-fw"></i><sup><span class="badge">
@@ -273,49 +282,16 @@ if(isset($_GET['action']) && $_GET['action'] == "logout") {
                             <a href="message.php"><i class="fa fa-comment fa-fw"></i> Message</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">Panels and Wells</a>
-                                </li>
-                                <li>
-                                    <a href="#">Buttons</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
+                            <a href="attendance.php"><i class="fa fa-sitemap fa-fw"></i> Attendance<span class="fa arrow"></span></a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Report<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#">Second Level Item</a>
+                                    <a href="#">Daily Report</a>
                                 </li>
                                 <li>
-                                    <a href="#">Second Level Item</a>
-                                </li>
-                                <li>
-                                    <a href="#">Third Level <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                    </ul>
-                                    <!-- /.nav-third-level -->
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">Blank Page</a>
-                                </li>
-                                <li>
-                                    <a href="#">Login Page</a>
+                                    <a href="#">Monthly Report</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

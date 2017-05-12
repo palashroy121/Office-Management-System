@@ -17,7 +17,7 @@ class Oms {
 		$result = $this->login_value_check($email, $password);
 
 		$id = $result->id;
-		$report = $this->save_report($id);
+		$report = $this->save_attendance($id);
 
 		if($email == ""){
 			$msg['email'] = '<p class="text-danger"><strong>Error! </strong>Field must not be empty!</p>';
@@ -55,17 +55,47 @@ class Oms {
 		return $result;
 	}
 
-	//Save Report
-	public function save_report($id){
-		$date = date('Y-m-d');
-		$time = date('H:i:s');
-		$sql = "INSERT INTO report (employee_id, date, entry, status) VALUES (:employee_id, :date, :entry, :status";
+	//Save Attendance
+	public function save_attendance($id){
+		$daily_date = date('Y-m-d');
+		$entry_time = date('H:i:s');
+
+		$checkAtten = $this->check_attendance($daily_date);
+
+		if(empty($checkAtten)){
+			$sql = "INSERT INTO attendance (employee_id, daily_date, entry_time) VALUES (:employee_id, :daily_date, :entry_time)";
+			$query = $this->db->conn->prepare($sql);
+			$query -> bindValue(":employee_id", $id);
+			$query -> bindValue(":daily_date", $daily_date);
+			$query -> bindValue(":entry_time", $entry_time);
+			$query->execute();
+		}
+	}
+	public function check_attendance($daily_date){
+		$sql = "SELECT * FROM attendance WHERE daily_date = :daily_date LIMIT 1";
 		$query = $this->db->conn->prepare($sql);
-		$query -> bindValue(":employee_id", $id);
-		$query -> bindValue(":date", $date);
-		$query -> bindValue(":entry", $time);
-		$query -> bindValue(":status", 1);
+		$query->bindValue(":daily_date", $daily_date);
 		$query->execute();
+		$result = $query-> fetch(PDO::FETCH_OBJ);
+		return $result;
+	}
+	public function ckeckout_time($id){
+		$exit_time = date('H:i:s');
+		$sql = "UPDATE attendance SET exit_time=:exit_time WHERE id=:id";
+		$query = $this->db->conn->prepare($sql);
+		$query -> bindValue(":exit_time", $exit_time);
+		$query -> bindValue(":id", $id);
+		$result = $query->execute();
+		if($result){
+			header("Location: dashboard.php");
+		}
+	}
+	public function view_attendance(){
+		$sql = "SELECT * FROM attendance";
+		$query = $this->db->conn->prepare($sql);
+		$query->execute();
+		$result = $query-> fetchAll();
+		return $result;
 	}
 
 	// Save Designation

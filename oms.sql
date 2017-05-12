@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2017 at 08:11 PM
+-- Generation Time: May 12, 2017 at 08:29 AM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -42,6 +42,29 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`id`, `name`, `username`, `phone`, `email`, `password`, `status`) VALUES
 (1, 'Palash Roy', 'palash', '01723156121', 'palash.cmt@gmail.com', '123456', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attendance`
+--
+
+CREATE TABLE `attendance` (
+  `id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `daily_date` date NOT NULL,
+  `entry_time` time NOT NULL,
+  `exit_time` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`id`, `employee_id`, `daily_date`, `entry_time`, `exit_time`) VALUES
+(1, 2, '2017-05-10', '16:58:49', '00:00:00'),
+(2, 2, '2017-05-11', '08:39:09', '08:10:26'),
+(3, 2, '2017-05-12', '07:36:06', '00:00:00');
 
 -- --------------------------------------------------------
 
@@ -123,21 +146,6 @@ INSERT INTO `message` (`id`, `sender_id`, `receiver_id`, `subject`, `body`, `dat
 (3, 1, 2, 'PHP Project OMS Login Sestem all OK.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...', '2017-04-22 12:59:51', '', 1),
 (4, 9, 7, 'Leave Application form.', 'Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.Leave Application form.', '2017-04-24 19:41:55', '', 2),
 (5, 1, 2, 'New Project', 'New project work start.', '2017-04-27 15:10:18', '', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `report`
---
-
-CREATE TABLE `report` (
-  `id` int(11) NOT NULL,
-  `employee_id` int(11) NOT NULL,
-  `date` date NOT NULL,
-  `entry` time NOT NULL,
-  `exit` time NOT NULL,
-  `status` tinyint(1) NOT NULL COMMENT '0 = Absent, 1 = Present'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -234,6 +242,12 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `attendance`
+--
+ALTER TABLE `attendance`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `employee`
 --
 ALTER TABLE `employee`
@@ -249,12 +263,6 @@ ALTER TABLE `leave`
 -- Indexes for table `message`
 --
 ALTER TABLE `message`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `report`
---
-ALTER TABLE `report`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -291,6 +299,11 @@ ALTER TABLE `tbl_leave_type`
 ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
+-- AUTO_INCREMENT for table `attendance`
+--
+ALTER TABLE `attendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
@@ -305,11 +318,6 @@ ALTER TABLE `leave`
 --
 ALTER TABLE `message`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT for table `report`
---
-ALTER TABLE `report`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `setting`
 --
