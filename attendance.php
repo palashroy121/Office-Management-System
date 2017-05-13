@@ -58,6 +58,24 @@ $viewSetting = $oms->view_setting();
                                     ?>
                                 </td>
                                 <td>
+                                    <?php
+                                        if($viewSetting->office_start_time<$Value['entry_time']){
+                                            echo "Extra";
+                                        }
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                        if($Value){
+                                            echo '<p class="btn btn-success btn-xs">Present</p>';
+                                        }
+                                    ?>
+                                </td>
+                                <td>
+                                   
+                                </td>
+
+                                <td>
                                 <a href="edit-employee.php?delete_id=<?php echo $EmpValue['id']; ?>" class="btn btn-danger btn-xs">Delete</a>
                                 </td>
                             </tr>
