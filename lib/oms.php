@@ -16,8 +16,8 @@ class Oms {
 
 		$result = $this->login_value_check($email, $password);
 
-		$id = $result->id;
-		$report = $this->save_attendance($id);
+		$id1 = $result->id;
+		$report = $this->save_attendance($id1);
 
 		if($email == ""){
 			$msg['email'] = '<p class="text-danger"><strong>Error! </strong>Field must not be empty!</p>';
@@ -56,35 +56,41 @@ class Oms {
 	}
 
 	//Save Attendance
-	public function save_attendance($id){
+	public function save_attendance($id1){
 		$daily_date = date('Y-m-d');
 		$entry_time = date('H:i:s');
 
-		$checkAtten = $this->check_attendance($daily_date);
+		$checkAtten = $this->check_attendance($id1, $daily_date);
 
 		if(empty($checkAtten)){
 			$sql = "INSERT INTO attendance (employee_id, daily_date, entry_time) VALUES (:employee_id, :daily_date, :entry_time)";
 			$query = $this->db->conn->prepare($sql);
-			$query -> bindValue(":employee_id", $id);
+			$query -> bindValue(":employee_id", $id1);
 			$query -> bindValue(":daily_date", $daily_date);
 			$query -> bindValue(":entry_time", $entry_time);
 			$query->execute();
 		}
+		else{
+			echo "Not";
+		}
 	}
-	public function check_attendance($daily_date){
-		$sql = "SELECT * FROM attendance WHERE daily_date = :daily_date LIMIT 1";
+	public function check_attendance($daily_date, $id1){
+		$sql = "SELECT * FROM attendance WHERE id=:id AND daily_date = :daily_date LIMIT 1";
 		$query = $this->db->conn->prepare($sql);
+		$query->bindValue(":id", $id1);
 		$query->bindValue(":daily_date", $daily_date);
 		$query->execute();
-		$result = $query-> fetch(PDO::FETCH_OBJ);
+		$result = $query->fetch(PDO::FETCH_OBJ);
 		return $result;
 	}
 	public function ckeckout_time($id){
 		$exit_time = date('H:i:s');
-		$sql = "UPDATE attendance SET exit_time=:exit_time WHERE id=:id";
+		$daily_date = date('Y-m-d');
+		$sql = "UPDATE attendance SET exit_time=:exit_time WHERE id=:id AND daily_date=:daily_date";
 		$query = $this->db->conn->prepare($sql);
 		$query -> bindValue(":exit_time", $exit_time);
 		$query -> bindValue(":id", $id);
+		$query -> bindValue(":daily_date", $daily_date);
 		$result = $query->execute();
 		if($result){
 			header("Location: dashboard.php");
@@ -94,7 +100,7 @@ class Oms {
 		$sql = "SELECT * FROM attendance";
 		$query = $this->db->conn->prepare($sql);
 		$query->execute();
-		$result = $query-> fetchAll();
+		$result = $query->fetchAll();
 		return $result;
 	}
 

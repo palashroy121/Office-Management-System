@@ -4,6 +4,8 @@ include 'header.php';
 
 $viewAtten = $oms->view_attendance();
 
+$viewSetting = $oms->view_setting();
+
 ?>
         <div id="page-wrapper">
             <div class="row">
@@ -38,10 +40,26 @@ $viewAtten = $oms->view_attendance();
                             <tr class="odd gradeX">
                                 <td><?php echo $Value['employee_id']; ?></td>
                                 <td><?php echo $Value['daily_date']; ?></td>
-                                <td><?php echo $Value['entry_time']; ?></td>
-                                <td><?php echo $Value['exit_time']; ?></td>
-                                <td><?php echo $Value['exit_time']-$Value['entry_time']; ?></td>
-                                <td><a href="edit-employee.php?edit_id=<?php echo $EmpValue['id']; ?>" class="btn btn-success btn-xs">Edit</a> <a href="edit-employee.php?delete_id=<?php echo $EmpValue['id']; ?>" class="btn btn-danger btn-xs">Delete</a></td>
+                                <td><?php echo date('H:i A', strtotime($Value['entry_time'])); ?></td>
+                                <td><?php echo date('H:i A', strtotime($Value['exit_time'])); ?></td>
+                                <td>
+                                    <?php
+                                        $exit_time = date('H:i', strtotime($Value['exit_time']));
+                                        $entry_time = date('H:i', strtotime($Value['entry_time']));
+                                        $diff=($entry_time-$exit_time);
+                                        echo date('H:i', $diff);
+                                    ?>  
+                                </td>
+                                <td>
+                                    <?php
+                                        if($viewSetting->office_start_time<$Value['entry_time']){
+                                            echo "Late";
+                                        }
+                                    ?>
+                                </td>
+                                <td>
+                                <a href="edit-employee.php?delete_id=<?php echo $EmpValue['id']; ?>" class="btn btn-danger btn-xs">Delete</a>
+                                </td>
                             </tr>
                             <?php
                                 }
