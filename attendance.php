@@ -44,23 +44,29 @@ $viewSetting = $oms->view_setting();
                                 <td><?php echo date('H:i A', strtotime($Value['exit_time'])); ?></td>
                                 <td>
                                     <?php
-                                        $exit_time = date('H:i', strtotime($Value['exit_time']));
-                                        $entry_time = date('H:i', strtotime($Value['entry_time']));
-                                        $diff=($entry_time-$exit_time);
-                                        echo date('H:i', $diff);
+                                        $entry_time = date('H:i:s', strtotime($Value['entry_time']));
+                                        $exit_time = date('H:i:s', strtotime($Value['exit_time']));
+                                        $diff=date_diff(date_create($entry_time),date_create($exit_time));
+                                        echo $diff->h.":".$diff->i;
                                     ?>  
                                 </td>
                                 <td>
                                     <?php
                                         if($viewSetting->office_start_time<$Value['entry_time']){
-                                            echo "Late";
+                                            $office_start_time = date('H:i:s', strtotime($viewSetting->office_start_time));
+                                            $entry_time = date('H:i:s', strtotime($Value['entry_time']));
+                                            $diff=date_diff(date_create($office_start_time),date_create($entry_time));
+                                            echo $diff->h.":".$diff->i;
                                         }
                                     ?>
                                 </td>
                                 <td>
                                     <?php
-                                        if($viewSetting->office_start_time<$Value['entry_time']){
-                                            echo "Extra";
+                                        if($viewSetting->office_end_time>$Value['exit_time']){
+                                            $office_end_time = date('H:i:s', strtotime($viewSetting->office_start_time));
+                                            $exit_time = date('H:i:s', strtotime($Value['exit_time']));
+                                            $diff=date_diff(date_create($office_end_time),date_create($exit_time));
+                                            echo $diff->h.":".$diff->i;
                                         }
                                     ?>
                                 </td>
